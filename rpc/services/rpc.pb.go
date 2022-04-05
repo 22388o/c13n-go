@@ -3168,6 +3168,168 @@ func (*RemoveDiscussionResponse) Descriptor() ([]byte, []int) {
 	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{49}
 }
 
+//* Represents a request to send a message.
+type SendRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Destination:
+	//	*SendRequest_DiscussionId
+	//	*SendRequest_PayReq
+	Destination isSendRequest_Destination `protobuf_oneof:"destination"`
+	//* The intended amount to be used for payment to each recipient.
+	AmtMsat int64 `protobuf:"varint,3,opt,name=amt_msat,json=amtMsat,proto3" json:"amt_msat,omitempty"`
+	//* The message payload.
+	Payload string `protobuf:"bytes,4,opt,name=payload,proto3" json:"payload,omitempty"`
+	//* The message options for the current message (overriding any discussion options).
+	Options *MessageOptions `protobuf:"bytes,5,opt,name=options,proto3" json:"options,omitempty"`
+}
+
+func (x *SendRequest) Reset() {
+	*x = SendRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_rpc_services_rpc_proto_msgTypes[50]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SendRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendRequest) ProtoMessage() {}
+
+func (x *SendRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_rpc_services_rpc_proto_msgTypes[50]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendRequest.ProtoReflect.Descriptor instead.
+func (*SendRequest) Descriptor() ([]byte, []int) {
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{50}
+}
+
+func (m *SendRequest) GetDestination() isSendRequest_Destination {
+	if m != nil {
+		return m.Destination
+	}
+	return nil
+}
+
+func (x *SendRequest) GetDiscussionId() uint64 {
+	if x, ok := x.GetDestination().(*SendRequest_DiscussionId); ok {
+		return x.DiscussionId
+	}
+	return 0
+}
+
+func (x *SendRequest) GetPayReq() string {
+	if x, ok := x.GetDestination().(*SendRequest_PayReq); ok {
+		return x.PayReq
+	}
+	return ""
+}
+
+func (x *SendRequest) GetAmtMsat() int64 {
+	if x != nil {
+		return x.AmtMsat
+	}
+	return 0
+}
+
+func (x *SendRequest) GetPayload() string {
+	if x != nil {
+		return x.Payload
+	}
+	return ""
+}
+
+func (x *SendRequest) GetOptions() *MessageOptions {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+type isSendRequest_Destination interface {
+	isSendRequest_Destination()
+}
+
+type SendRequest_DiscussionId struct {
+	//* The discussion where the message is to be sent.
+	DiscussionId uint64 `protobuf:"varint,1,opt,name=discussion_id,json=discussionId,proto3,oneof"`
+}
+
+type SendRequest_PayReq struct {
+	//* The payment request to fulfil.
+	//
+	//If empty, a spontaneous message is sent.
+	//A discussion with the recipient node will be created if it does not exist.
+	PayReq string `protobuf:"bytes,2,opt,name=pay_req,json=payReq,proto3,oneof"`
+}
+
+func (*SendRequest_DiscussionId) isSendRequest_Destination() {}
+
+func (*SendRequest_PayReq) isSendRequest_Destination() {}
+
+//* A SendResponse is received in response to a Send rpc call.
+type SendResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	//* The sent message.
+	SentMessage *Message `protobuf:"bytes,1,opt,name=sent_message,json=sentMessage,proto3" json:"sent_message,omitempty"`
+}
+
+func (x *SendResponse) Reset() {
+	*x = SendResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_rpc_services_rpc_proto_msgTypes[51]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SendResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendResponse) ProtoMessage() {}
+
+func (x *SendResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_rpc_services_rpc_proto_msgTypes[51]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendResponse.ProtoReflect.Descriptor instead.
+func (*SendResponse) Descriptor() ([]byte, []int) {
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{51}
+}
+
+func (x *SendResponse) GetSentMessage() *Message {
+	if x != nil {
+		return x.SentMessage
+	}
+	return nil
+}
+
 //* Corresponds to an invoice creation request.
 type CreateInvoiceRequest struct {
 	state         protoimpl.MessageState
@@ -3187,7 +3349,7 @@ type CreateInvoiceRequest struct {
 func (x *CreateInvoiceRequest) Reset() {
 	*x = CreateInvoiceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[50]
+		mi := &file_rpc_services_rpc_proto_msgTypes[52]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3200,7 +3362,7 @@ func (x *CreateInvoiceRequest) String() string {
 func (*CreateInvoiceRequest) ProtoMessage() {}
 
 func (x *CreateInvoiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[50]
+	mi := &file_rpc_services_rpc_proto_msgTypes[52]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3213,7 +3375,7 @@ func (x *CreateInvoiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateInvoiceRequest.ProtoReflect.Descriptor instead.
 func (*CreateInvoiceRequest) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{50}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *CreateInvoiceRequest) GetMemo() string {
@@ -3257,7 +3419,7 @@ type CreateInvoiceResponse struct {
 func (x *CreateInvoiceResponse) Reset() {
 	*x = CreateInvoiceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[51]
+		mi := &file_rpc_services_rpc_proto_msgTypes[53]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3270,7 +3432,7 @@ func (x *CreateInvoiceResponse) String() string {
 func (*CreateInvoiceResponse) ProtoMessage() {}
 
 func (x *CreateInvoiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[51]
+	mi := &file_rpc_services_rpc_proto_msgTypes[53]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3283,7 +3445,7 @@ func (x *CreateInvoiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateInvoiceResponse.ProtoReflect.Descriptor instead.
 func (*CreateInvoiceResponse) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{51}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *CreateInvoiceResponse) GetInvoice() *Invoice {
@@ -3306,7 +3468,7 @@ type LookupInvoiceRequest struct {
 func (x *LookupInvoiceRequest) Reset() {
 	*x = LookupInvoiceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[52]
+		mi := &file_rpc_services_rpc_proto_msgTypes[54]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3319,7 +3481,7 @@ func (x *LookupInvoiceRequest) String() string {
 func (*LookupInvoiceRequest) ProtoMessage() {}
 
 func (x *LookupInvoiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[52]
+	mi := &file_rpc_services_rpc_proto_msgTypes[54]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3332,7 +3494,7 @@ func (x *LookupInvoiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LookupInvoiceRequest.ProtoReflect.Descriptor instead.
 func (*LookupInvoiceRequest) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{52}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *LookupInvoiceRequest) GetPayReq() string {
@@ -3355,7 +3517,7 @@ type LookupInvoiceResponse struct {
 func (x *LookupInvoiceResponse) Reset() {
 	*x = LookupInvoiceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[53]
+		mi := &file_rpc_services_rpc_proto_msgTypes[55]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3368,7 +3530,7 @@ func (x *LookupInvoiceResponse) String() string {
 func (*LookupInvoiceResponse) ProtoMessage() {}
 
 func (x *LookupInvoiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[53]
+	mi := &file_rpc_services_rpc_proto_msgTypes[55]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3381,7 +3543,7 @@ func (x *LookupInvoiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LookupInvoiceResponse.ProtoReflect.Descriptor instead.
 func (*LookupInvoiceResponse) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{53}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *LookupInvoiceResponse) GetInvoice() *Invoice {
@@ -3410,7 +3572,7 @@ type PayRequest struct {
 func (x *PayRequest) Reset() {
 	*x = PayRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[54]
+		mi := &file_rpc_services_rpc_proto_msgTypes[56]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3423,7 +3585,7 @@ func (x *PayRequest) String() string {
 func (*PayRequest) ProtoMessage() {}
 
 func (x *PayRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[54]
+	mi := &file_rpc_services_rpc_proto_msgTypes[56]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3436,7 +3598,7 @@ func (x *PayRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PayRequest.ProtoReflect.Descriptor instead.
 func (*PayRequest) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{54}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{56}
 }
 
 func (m *PayRequest) GetDestination() isPayRequest_Destination {
@@ -3505,7 +3667,7 @@ type PaymentOptions struct {
 func (x *PaymentOptions) Reset() {
 	*x = PaymentOptions{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[55]
+		mi := &file_rpc_services_rpc_proto_msgTypes[57]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3518,7 +3680,7 @@ func (x *PaymentOptions) String() string {
 func (*PaymentOptions) ProtoMessage() {}
 
 func (x *PaymentOptions) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[55]
+	mi := &file_rpc_services_rpc_proto_msgTypes[57]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3531,7 +3693,7 @@ func (x *PaymentOptions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentOptions.ProtoReflect.Descriptor instead.
 func (*PaymentOptions) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{55}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *PaymentOptions) GetFeeLimitMsat() int64 {
@@ -3554,7 +3716,7 @@ type PayResponse struct {
 func (x *PayResponse) Reset() {
 	*x = PayResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[56]
+		mi := &file_rpc_services_rpc_proto_msgTypes[58]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3567,7 +3729,7 @@ func (x *PayResponse) String() string {
 func (*PayResponse) ProtoMessage() {}
 
 func (x *PayResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[56]
+	mi := &file_rpc_services_rpc_proto_msgTypes[58]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3580,7 +3742,7 @@ func (x *PayResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PayResponse.ProtoReflect.Descriptor instead.
 func (*PayResponse) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{56}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *PayResponse) GetPayment() *Payment {
@@ -3617,7 +3779,7 @@ type Payment struct {
 func (x *Payment) Reset() {
 	*x = Payment{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[57]
+		mi := &file_rpc_services_rpc_proto_msgTypes[59]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3630,7 +3792,7 @@ func (x *Payment) String() string {
 func (*Payment) ProtoMessage() {}
 
 func (x *Payment) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[57]
+	mi := &file_rpc_services_rpc_proto_msgTypes[59]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3643,7 +3805,7 @@ func (x *Payment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Payment.ProtoReflect.Descriptor instead.
 func (*Payment) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{57}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *Payment) GetHash() string {
@@ -3743,7 +3905,7 @@ type Invoice struct {
 func (x *Invoice) Reset() {
 	*x = Invoice{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[58]
+		mi := &file_rpc_services_rpc_proto_msgTypes[60]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3756,7 +3918,7 @@ func (x *Invoice) String() string {
 func (*Invoice) ProtoMessage() {}
 
 func (x *Invoice) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[58]
+	mi := &file_rpc_services_rpc_proto_msgTypes[60]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3769,7 +3931,7 @@ func (x *Invoice) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Invoice.ProtoReflect.Descriptor instead.
 func (*Invoice) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{58}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *Invoice) GetMemo() string {
@@ -3890,7 +4052,7 @@ type RouteHint struct {
 func (x *RouteHint) Reset() {
 	*x = RouteHint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[59]
+		mi := &file_rpc_services_rpc_proto_msgTypes[61]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3903,7 +4065,7 @@ func (x *RouteHint) String() string {
 func (*RouteHint) ProtoMessage() {}
 
 func (x *RouteHint) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[59]
+	mi := &file_rpc_services_rpc_proto_msgTypes[61]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3916,7 +4078,7 @@ func (x *RouteHint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RouteHint.ProtoReflect.Descriptor instead.
 func (*RouteHint) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{59}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *RouteHint) GetHopHints() []*HopHint {
@@ -3947,7 +4109,7 @@ type HopHint struct {
 func (x *HopHint) Reset() {
 	*x = HopHint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[60]
+		mi := &file_rpc_services_rpc_proto_msgTypes[62]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3960,7 +4122,7 @@ func (x *HopHint) String() string {
 func (*HopHint) ProtoMessage() {}
 
 func (x *HopHint) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[60]
+	mi := &file_rpc_services_rpc_proto_msgTypes[62]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3973,7 +4135,7 @@ func (x *HopHint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HopHint.ProtoReflect.Descriptor instead.
 func (*HopHint) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{60}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *HopHint) GetPubkey() string {
@@ -4034,7 +4196,7 @@ type InvoiceHTLC struct {
 func (x *InvoiceHTLC) Reset() {
 	*x = InvoiceHTLC{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_services_rpc_proto_msgTypes[61]
+		mi := &file_rpc_services_rpc_proto_msgTypes[63]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4047,7 +4209,7 @@ func (x *InvoiceHTLC) String() string {
 func (*InvoiceHTLC) ProtoMessage() {}
 
 func (x *InvoiceHTLC) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_services_rpc_proto_msgTypes[61]
+	mi := &file_rpc_services_rpc_proto_msgTypes[63]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4060,7 +4222,7 @@ func (x *InvoiceHTLC) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InvoiceHTLC.ProtoReflect.Descriptor instead.
 func (*InvoiceHTLC) Descriptor() ([]byte, []int) {
-	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{61}
+	return file_rpc_services_rpc_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *InvoiceHTLC) GetChanId() uint64 {
@@ -4449,7 +4611,24 @@ var file_rpc_services_rpc_proto_rawDesc = []byte{
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x04, 0x42, 0x06, 0xe2, 0xdf, 0x1f, 0x02, 0x20, 0x01, 0x52, 0x02, 0x69, 0x64, 0x22,
 	0x1a, 0x0a, 0x18, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x44, 0x69, 0x73, 0x63, 0x75, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x77, 0x0a, 0x14, 0x43,
+	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xc7, 0x01, 0x0a, 0x0b,
+	0x53, 0x65, 0x6e, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x0d, 0x64,
+	0x69, 0x73, 0x63, 0x75, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x04, 0x48, 0x00, 0x52, 0x0c, 0x64, 0x69, 0x73, 0x63, 0x75, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x49, 0x64, 0x12, 0x19, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x5f, 0x72, 0x65, 0x71, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x06, 0x70, 0x61, 0x79, 0x52, 0x65, 0x71, 0x12, 0x19, 0x0a,
+	0x08, 0x61, 0x6d, 0x74, 0x5f, 0x6d, 0x73, 0x61, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x07, 0x61, 0x6d, 0x74, 0x4d, 0x73, 0x61, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c,
+	0x6f, 0x61, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f,
+	0x61, 0x64, 0x12, 0x32, 0x0a, 0x07, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x07, 0x6f,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0x0d, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x74, 0x69, 0x6e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x44, 0x0a, 0x0c, 0x53, 0x65, 0x6e, 0x64, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x34, 0x0a, 0x0c, 0x73, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x0b,
+	0x73, 0x65, 0x6e, 0x74, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x77, 0x0a, 0x14, 0x43,
 	0x72, 0x65, 0x61, 0x74, 0x65, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6d, 0x65, 0x6d, 0x6f, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x04, 0x6d, 0x65, 0x6d, 0x6f, 0x12, 0x19, 0x0a, 0x08, 0x61, 0x6d, 0x74, 0x5f, 0x6d,
@@ -4679,7 +4858,7 @@ var file_rpc_services_rpc_proto_rawDesc = []byte{
 	0x65, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
 	0x22, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x53, 0x75, 0x62, 0x73, 0x63,
 	0x72, 0x69, 0x62, 0x65, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x00, 0x30, 0x01, 0x32, 0xef, 0x04, 0x0a, 0x11, 0x44, 0x69, 0x73, 0x63,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x30, 0x01, 0x32, 0xa8, 0x05, 0x0a, 0x11, 0x44, 0x69, 0x73, 0x63,
 	0x75, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x57, 0x0a,
 	0x0e, 0x47, 0x65, 0x74, 0x44, 0x69, 0x73, 0x63, 0x75, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12,
 	0x1f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x44, 0x69,
@@ -4718,25 +4897,29 @@ var file_rpc_services_rpc_proto_rawDesc = []byte{
 	0x76, 0x65, 0x44, 0x69, 0x73, 0x63, 0x75, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x1a, 0x22, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x52,
 	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x44, 0x69, 0x73, 0x63, 0x75, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x32, 0xee, 0x01, 0x0a, 0x0e, 0x50, 0x61,
-	0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x52, 0x0a, 0x0d,
-	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x12, 0x1e, 0x2e,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x49,
-	0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x49,
-	0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
-	0x12, 0x52, 0x0a, 0x0d, 0x4c, 0x6f, 0x6f, 0x6b, 0x75, 0x70, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63,
-	0x65, 0x12, 0x1e, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x4c, 0x6f, 0x6f,
-	0x6b, 0x75, 0x70, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x1f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x4c, 0x6f, 0x6f,
-	0x6b, 0x75, 0x70, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x12, 0x34, 0x0a, 0x03, 0x50, 0x61, 0x79, 0x12, 0x14, 0x2e, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x61, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x15, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x61, 0x79,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x29, 0x5a, 0x27, 0x67, 0x69,
-	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x31, 0x33, 0x6e, 0x2d, 0x69, 0x6f,
-	0x2f, 0x63, 0x31, 0x33, 0x6e, 0x2d, 0x67, 0x6f, 0x2f, 0x72, 0x70, 0x63, 0x2f, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x37, 0x0a, 0x04, 0x53, 0x65, 0x6e,
+	0x64, 0x12, 0x15, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x53, 0x65, 0x6e,
+	0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x73, 0x2e, 0x53, 0x65, 0x6e, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x32, 0xee, 0x01, 0x0a, 0x0e, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x52, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x49,
+	0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x12, 0x1e, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x52, 0x0a, 0x0d, 0x4c, 0x6f, 0x6f,
+	0x6b, 0x75, 0x70, 0x49, 0x6e, 0x76, 0x6f, 0x69, 0x63, 0x65, 0x12, 0x1e, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x4c, 0x6f, 0x6f, 0x6b, 0x75, 0x70, 0x49, 0x6e, 0x76, 0x6f,
+	0x69, 0x63, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x4c, 0x6f, 0x6f, 0x6b, 0x75, 0x70, 0x49, 0x6e, 0x76, 0x6f,
+	0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x34, 0x0a,
+	0x03, 0x50, 0x61, 0x79, 0x12, 0x14, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
+	0x50, 0x61, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x50, 0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x00, 0x42, 0x29, 0x5a, 0x27, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
+	0x6d, 0x2f, 0x63, 0x31, 0x33, 0x6e, 0x2d, 0x69, 0x6f, 0x2f, 0x63, 0x31, 0x33, 0x6e, 0x2d, 0x67,
+	0x6f, 0x2f, 0x72, 0x70, 0x63, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -4752,7 +4935,7 @@ func file_rpc_services_rpc_proto_rawDescGZIP() []byte {
 }
 
 var file_rpc_services_rpc_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_rpc_services_rpc_proto_msgTypes = make([]protoimpl.MessageInfo, 62)
+var file_rpc_services_rpc_proto_msgTypes = make([]protoimpl.MessageInfo, 64)
 var file_rpc_services_rpc_proto_goTypes = []interface{}{
 	(PaymentState)(0),                       // 0: services.PaymentState
 	(InvoiceState)(0),                       // 1: services.InvoiceState
@@ -4807,19 +4990,21 @@ var file_rpc_services_rpc_proto_goTypes = []interface{}{
 	(*UpdateDiscussionResponse)(nil),        // 50: services.UpdateDiscussionResponse
 	(*RemoveDiscussionRequest)(nil),         // 51: services.RemoveDiscussionRequest
 	(*RemoveDiscussionResponse)(nil),        // 52: services.RemoveDiscussionResponse
-	(*CreateInvoiceRequest)(nil),            // 53: services.CreateInvoiceRequest
-	(*CreateInvoiceResponse)(nil),           // 54: services.CreateInvoiceResponse
-	(*LookupInvoiceRequest)(nil),            // 55: services.LookupInvoiceRequest
-	(*LookupInvoiceResponse)(nil),           // 56: services.LookupInvoiceResponse
-	(*PayRequest)(nil),                      // 57: services.PayRequest
-	(*PaymentOptions)(nil),                  // 58: services.PaymentOptions
-	(*PayResponse)(nil),                     // 59: services.PayResponse
-	(*Payment)(nil),                         // 60: services.Payment
-	(*Invoice)(nil),                         // 61: services.Invoice
-	(*RouteHint)(nil),                       // 62: services.RouteHint
-	(*HopHint)(nil),                         // 63: services.HopHint
-	(*InvoiceHTLC)(nil),                     // 64: services.InvoiceHTLC
-	(*timestamppb.Timestamp)(nil),           // 65: google.protobuf.Timestamp
+	(*SendRequest)(nil),                     // 53: services.SendRequest
+	(*SendResponse)(nil),                    // 54: services.SendResponse
+	(*CreateInvoiceRequest)(nil),            // 55: services.CreateInvoiceRequest
+	(*CreateInvoiceResponse)(nil),           // 56: services.CreateInvoiceResponse
+	(*LookupInvoiceRequest)(nil),            // 57: services.LookupInvoiceRequest
+	(*LookupInvoiceResponse)(nil),           // 58: services.LookupInvoiceResponse
+	(*PayRequest)(nil),                      // 59: services.PayRequest
+	(*PaymentOptions)(nil),                  // 60: services.PaymentOptions
+	(*PayResponse)(nil),                     // 61: services.PayResponse
+	(*Payment)(nil),                         // 62: services.Payment
+	(*Invoice)(nil),                         // 63: services.Invoice
+	(*RouteHint)(nil),                       // 64: services.RouteHint
+	(*HopHint)(nil),                         // 65: services.HopHint
+	(*InvoiceHTLC)(nil),                     // 66: services.InvoiceHTLC
+	(*timestamppb.Timestamp)(nil),           // 67: google.protobuf.Timestamp
 }
 var file_rpc_services_rpc_proto_depIdxs = []int32{
 	6,  // 0: services.SelfInfoResponse.info:type_name -> services.NodeInfo
@@ -4829,12 +5014,12 @@ var file_rpc_services_rpc_proto_depIdxs = []int32{
 	20, // 4: services.GetContactsResponse.contacts:type_name -> services.ContactInfo
 	20, // 5: services.AddContactRequest.contact:type_name -> services.ContactInfo
 	20, // 6: services.AddContactResponse.contact:type_name -> services.ContactInfo
-	60, // 7: services.Payments.payments:type_name -> services.Payment
-	65, // 8: services.Message.sent_timestamp:type_name -> google.protobuf.Timestamp
-	65, // 9: services.Message.received_timestamp:type_name -> google.protobuf.Timestamp
+	62, // 7: services.Payments.payments:type_name -> services.Payment
+	67, // 8: services.Message.sent_timestamp:type_name -> google.protobuf.Timestamp
+	67, // 9: services.Message.received_timestamp:type_name -> google.protobuf.Timestamp
 	30, // 10: services.Message.payment_routes:type_name -> services.PaymentRoute
 	28, // 11: services.Message.payments:type_name -> services.Payments
-	61, // 12: services.Message.invoice:type_name -> services.Invoice
+	63, // 12: services.Message.invoice:type_name -> services.Invoice
 	31, // 13: services.PaymentRoute.hops:type_name -> services.PaymentHop
 	32, // 14: services.EstimateMessageRequest.options:type_name -> services.MessageOptions
 	29, // 15: services.EstimateMessageResponse.message:type_name -> services.Message
@@ -4847,75 +5032,79 @@ var file_rpc_services_rpc_proto_depIdxs = []int32{
 	29, // 22: services.GetDiscussionHistoryResponse.message:type_name -> services.Message
 	39, // 23: services.AddDiscussionRequest.discussion:type_name -> services.DiscussionInfo
 	39, // 24: services.AddDiscussionResponse.discussion:type_name -> services.DiscussionInfo
-	61, // 25: services.CreateInvoiceResponse.invoice:type_name -> services.Invoice
-	61, // 26: services.LookupInvoiceResponse.invoice:type_name -> services.Invoice
-	58, // 27: services.PayRequest.options:type_name -> services.PaymentOptions
-	60, // 28: services.PayResponse.payment:type_name -> services.Payment
-	65, // 29: services.Payment.created_timestamp:type_name -> google.protobuf.Timestamp
-	65, // 30: services.Payment.resolved_timestamp:type_name -> google.protobuf.Timestamp
-	0,  // 31: services.Payment.state:type_name -> services.PaymentState
-	65, // 32: services.Invoice.created_timestamp:type_name -> google.protobuf.Timestamp
-	65, // 33: services.Invoice.settled_timestamp:type_name -> google.protobuf.Timestamp
-	62, // 34: services.Invoice.route_hints:type_name -> services.RouteHint
-	1,  // 35: services.Invoice.state:type_name -> services.InvoiceState
-	64, // 36: services.Invoice.invoice_htlcs:type_name -> services.InvoiceHTLC
-	63, // 37: services.RouteHint.hop_hints:type_name -> services.HopHint
-	2,  // 38: services.InvoiceHTLC.state:type_name -> services.InvoiceHTLCState
-	65, // 39: services.InvoiceHTLC.accept_timestamp:type_name -> google.protobuf.Timestamp
-	65, // 40: services.InvoiceHTLC.resolve_timestamp:type_name -> google.protobuf.Timestamp
-	4,  // 41: services.NodeInfoService.GetVersion:input_type -> services.VersionRequest
-	7,  // 42: services.NodeInfoService.GetSelfInfo:input_type -> services.SelfInfoRequest
-	10, // 43: services.NodeInfoService.GetSelfBalance:input_type -> services.SelfBalanceRequest
-	12, // 44: services.NodeInfoService.GetNodes:input_type -> services.GetNodesRequest
-	13, // 45: services.NodeInfoService.SearchNodeByAddress:input_type -> services.SearchNodeByAddressRequest
-	14, // 46: services.NodeInfoService.SearchNodeByAlias:input_type -> services.SearchNodeByAliasRequest
-	16, // 47: services.NodeInfoService.ConnectNode:input_type -> services.ConnectNodeRequest
-	18, // 48: services.ChannelService.OpenChannel:input_type -> services.OpenChannelRequest
-	21, // 49: services.ContactService.GetContacts:input_type -> services.GetContactsRequest
-	23, // 50: services.ContactService.AddContact:input_type -> services.AddContactRequest
-	25, // 51: services.ContactService.RemoveContactByID:input_type -> services.RemoveContactByIDRequest
-	26, // 52: services.ContactService.RemoveContactByAddress:input_type -> services.RemoveContactByAddressRequest
-	33, // 53: services.MessageService.EstimateMessage:input_type -> services.EstimateMessageRequest
-	35, // 54: services.MessageService.SendMessage:input_type -> services.SendMessageRequest
-	37, // 55: services.MessageService.SubscribeMessages:input_type -> services.SubscribeMessageRequest
-	41, // 56: services.DiscussionService.GetDiscussions:input_type -> services.GetDiscussionsRequest
-	43, // 57: services.DiscussionService.GetDiscussionHistoryByID:input_type -> services.GetDiscussionHistoryByIDRequest
-	45, // 58: services.DiscussionService.GetDiscussionStatistics:input_type -> services.GetDiscussionStatisticsRequest
-	47, // 59: services.DiscussionService.AddDiscussion:input_type -> services.AddDiscussionRequest
-	49, // 60: services.DiscussionService.UpdateDiscussionLastRead:input_type -> services.UpdateDiscussionLastReadRequest
-	51, // 61: services.DiscussionService.RemoveDiscussion:input_type -> services.RemoveDiscussionRequest
-	53, // 62: services.PaymentService.CreateInvoice:input_type -> services.CreateInvoiceRequest
-	55, // 63: services.PaymentService.LookupInvoice:input_type -> services.LookupInvoiceRequest
-	57, // 64: services.PaymentService.Pay:input_type -> services.PayRequest
-	5,  // 65: services.NodeInfoService.GetVersion:output_type -> services.Version
-	9,  // 66: services.NodeInfoService.GetSelfInfo:output_type -> services.SelfInfoResponse
-	11, // 67: services.NodeInfoService.GetSelfBalance:output_type -> services.SelfBalanceResponse
-	15, // 68: services.NodeInfoService.GetNodes:output_type -> services.NodeInfoResponse
-	15, // 69: services.NodeInfoService.SearchNodeByAddress:output_type -> services.NodeInfoResponse
-	15, // 70: services.NodeInfoService.SearchNodeByAlias:output_type -> services.NodeInfoResponse
-	17, // 71: services.NodeInfoService.ConnectNode:output_type -> services.ConnectNodeResponse
-	19, // 72: services.ChannelService.OpenChannel:output_type -> services.OpenChannelResponse
-	22, // 73: services.ContactService.GetContacts:output_type -> services.GetContactsResponse
-	24, // 74: services.ContactService.AddContact:output_type -> services.AddContactResponse
-	27, // 75: services.ContactService.RemoveContactByID:output_type -> services.RemoveContactResponse
-	27, // 76: services.ContactService.RemoveContactByAddress:output_type -> services.RemoveContactResponse
-	34, // 77: services.MessageService.EstimateMessage:output_type -> services.EstimateMessageResponse
-	36, // 78: services.MessageService.SendMessage:output_type -> services.SendMessageResponse
-	38, // 79: services.MessageService.SubscribeMessages:output_type -> services.SubscribeMessageResponse
-	42, // 80: services.DiscussionService.GetDiscussions:output_type -> services.GetDiscussionsResponse
-	44, // 81: services.DiscussionService.GetDiscussionHistoryByID:output_type -> services.GetDiscussionHistoryResponse
-	46, // 82: services.DiscussionService.GetDiscussionStatistics:output_type -> services.GetDiscussionStatisticsResponse
-	48, // 83: services.DiscussionService.AddDiscussion:output_type -> services.AddDiscussionResponse
-	50, // 84: services.DiscussionService.UpdateDiscussionLastRead:output_type -> services.UpdateDiscussionResponse
-	52, // 85: services.DiscussionService.RemoveDiscussion:output_type -> services.RemoveDiscussionResponse
-	54, // 86: services.PaymentService.CreateInvoice:output_type -> services.CreateInvoiceResponse
-	56, // 87: services.PaymentService.LookupInvoice:output_type -> services.LookupInvoiceResponse
-	59, // 88: services.PaymentService.Pay:output_type -> services.PayResponse
-	65, // [65:89] is the sub-list for method output_type
-	41, // [41:65] is the sub-list for method input_type
-	41, // [41:41] is the sub-list for extension type_name
-	41, // [41:41] is the sub-list for extension extendee
-	0,  // [0:41] is the sub-list for field type_name
+	32, // 25: services.SendRequest.options:type_name -> services.MessageOptions
+	29, // 26: services.SendResponse.sent_message:type_name -> services.Message
+	63, // 27: services.CreateInvoiceResponse.invoice:type_name -> services.Invoice
+	63, // 28: services.LookupInvoiceResponse.invoice:type_name -> services.Invoice
+	60, // 29: services.PayRequest.options:type_name -> services.PaymentOptions
+	62, // 30: services.PayResponse.payment:type_name -> services.Payment
+	67, // 31: services.Payment.created_timestamp:type_name -> google.protobuf.Timestamp
+	67, // 32: services.Payment.resolved_timestamp:type_name -> google.protobuf.Timestamp
+	0,  // 33: services.Payment.state:type_name -> services.PaymentState
+	67, // 34: services.Invoice.created_timestamp:type_name -> google.protobuf.Timestamp
+	67, // 35: services.Invoice.settled_timestamp:type_name -> google.protobuf.Timestamp
+	64, // 36: services.Invoice.route_hints:type_name -> services.RouteHint
+	1,  // 37: services.Invoice.state:type_name -> services.InvoiceState
+	66, // 38: services.Invoice.invoice_htlcs:type_name -> services.InvoiceHTLC
+	65, // 39: services.RouteHint.hop_hints:type_name -> services.HopHint
+	2,  // 40: services.InvoiceHTLC.state:type_name -> services.InvoiceHTLCState
+	67, // 41: services.InvoiceHTLC.accept_timestamp:type_name -> google.protobuf.Timestamp
+	67, // 42: services.InvoiceHTLC.resolve_timestamp:type_name -> google.protobuf.Timestamp
+	4,  // 43: services.NodeInfoService.GetVersion:input_type -> services.VersionRequest
+	7,  // 44: services.NodeInfoService.GetSelfInfo:input_type -> services.SelfInfoRequest
+	10, // 45: services.NodeInfoService.GetSelfBalance:input_type -> services.SelfBalanceRequest
+	12, // 46: services.NodeInfoService.GetNodes:input_type -> services.GetNodesRequest
+	13, // 47: services.NodeInfoService.SearchNodeByAddress:input_type -> services.SearchNodeByAddressRequest
+	14, // 48: services.NodeInfoService.SearchNodeByAlias:input_type -> services.SearchNodeByAliasRequest
+	16, // 49: services.NodeInfoService.ConnectNode:input_type -> services.ConnectNodeRequest
+	18, // 50: services.ChannelService.OpenChannel:input_type -> services.OpenChannelRequest
+	21, // 51: services.ContactService.GetContacts:input_type -> services.GetContactsRequest
+	23, // 52: services.ContactService.AddContact:input_type -> services.AddContactRequest
+	25, // 53: services.ContactService.RemoveContactByID:input_type -> services.RemoveContactByIDRequest
+	26, // 54: services.ContactService.RemoveContactByAddress:input_type -> services.RemoveContactByAddressRequest
+	33, // 55: services.MessageService.EstimateMessage:input_type -> services.EstimateMessageRequest
+	35, // 56: services.MessageService.SendMessage:input_type -> services.SendMessageRequest
+	37, // 57: services.MessageService.SubscribeMessages:input_type -> services.SubscribeMessageRequest
+	41, // 58: services.DiscussionService.GetDiscussions:input_type -> services.GetDiscussionsRequest
+	43, // 59: services.DiscussionService.GetDiscussionHistoryByID:input_type -> services.GetDiscussionHistoryByIDRequest
+	45, // 60: services.DiscussionService.GetDiscussionStatistics:input_type -> services.GetDiscussionStatisticsRequest
+	47, // 61: services.DiscussionService.AddDiscussion:input_type -> services.AddDiscussionRequest
+	49, // 62: services.DiscussionService.UpdateDiscussionLastRead:input_type -> services.UpdateDiscussionLastReadRequest
+	51, // 63: services.DiscussionService.RemoveDiscussion:input_type -> services.RemoveDiscussionRequest
+	53, // 64: services.DiscussionService.Send:input_type -> services.SendRequest
+	55, // 65: services.PaymentService.CreateInvoice:input_type -> services.CreateInvoiceRequest
+	57, // 66: services.PaymentService.LookupInvoice:input_type -> services.LookupInvoiceRequest
+	59, // 67: services.PaymentService.Pay:input_type -> services.PayRequest
+	5,  // 68: services.NodeInfoService.GetVersion:output_type -> services.Version
+	9,  // 69: services.NodeInfoService.GetSelfInfo:output_type -> services.SelfInfoResponse
+	11, // 70: services.NodeInfoService.GetSelfBalance:output_type -> services.SelfBalanceResponse
+	15, // 71: services.NodeInfoService.GetNodes:output_type -> services.NodeInfoResponse
+	15, // 72: services.NodeInfoService.SearchNodeByAddress:output_type -> services.NodeInfoResponse
+	15, // 73: services.NodeInfoService.SearchNodeByAlias:output_type -> services.NodeInfoResponse
+	17, // 74: services.NodeInfoService.ConnectNode:output_type -> services.ConnectNodeResponse
+	19, // 75: services.ChannelService.OpenChannel:output_type -> services.OpenChannelResponse
+	22, // 76: services.ContactService.GetContacts:output_type -> services.GetContactsResponse
+	24, // 77: services.ContactService.AddContact:output_type -> services.AddContactResponse
+	27, // 78: services.ContactService.RemoveContactByID:output_type -> services.RemoveContactResponse
+	27, // 79: services.ContactService.RemoveContactByAddress:output_type -> services.RemoveContactResponse
+	34, // 80: services.MessageService.EstimateMessage:output_type -> services.EstimateMessageResponse
+	36, // 81: services.MessageService.SendMessage:output_type -> services.SendMessageResponse
+	38, // 82: services.MessageService.SubscribeMessages:output_type -> services.SubscribeMessageResponse
+	42, // 83: services.DiscussionService.GetDiscussions:output_type -> services.GetDiscussionsResponse
+	44, // 84: services.DiscussionService.GetDiscussionHistoryByID:output_type -> services.GetDiscussionHistoryResponse
+	46, // 85: services.DiscussionService.GetDiscussionStatistics:output_type -> services.GetDiscussionStatisticsResponse
+	48, // 86: services.DiscussionService.AddDiscussion:output_type -> services.AddDiscussionResponse
+	50, // 87: services.DiscussionService.UpdateDiscussionLastRead:output_type -> services.UpdateDiscussionResponse
+	52, // 88: services.DiscussionService.RemoveDiscussion:output_type -> services.RemoveDiscussionResponse
+	54, // 89: services.DiscussionService.Send:output_type -> services.SendResponse
+	56, // 90: services.PaymentService.CreateInvoice:output_type -> services.CreateInvoiceResponse
+	58, // 91: services.PaymentService.LookupInvoice:output_type -> services.LookupInvoiceResponse
+	61, // 92: services.PaymentService.Pay:output_type -> services.PayResponse
+	68, // [68:93] is the sub-list for method output_type
+	43, // [43:68] is the sub-list for method input_type
+	43, // [43:43] is the sub-list for extension type_name
+	43, // [43:43] is the sub-list for extension extendee
+	0,  // [0:43] is the sub-list for field type_name
 }
 
 func init() { file_rpc_services_rpc_proto_init() }
@@ -5525,7 +5714,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[50].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateInvoiceRequest); i {
+			switch v := v.(*SendRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5537,7 +5726,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateInvoiceResponse); i {
+			switch v := v.(*SendResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5549,7 +5738,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LookupInvoiceRequest); i {
+			switch v := v.(*CreateInvoiceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5561,7 +5750,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[53].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LookupInvoiceResponse); i {
+			switch v := v.(*CreateInvoiceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5573,7 +5762,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[54].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PayRequest); i {
+			switch v := v.(*LookupInvoiceRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5585,7 +5774,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[55].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PaymentOptions); i {
+			switch v := v.(*LookupInvoiceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5597,7 +5786,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[56].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PayResponse); i {
+			switch v := v.(*PayRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5609,7 +5798,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[57].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Payment); i {
+			switch v := v.(*PaymentOptions); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5621,7 +5810,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[58].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Invoice); i {
+			switch v := v.(*PayResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5633,7 +5822,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[59].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RouteHint); i {
+			switch v := v.(*Payment); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5645,7 +5834,7 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[60].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HopHint); i {
+			switch v := v.(*Invoice); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5657,6 +5846,30 @@ func file_rpc_services_rpc_proto_init() {
 			}
 		}
 		file_rpc_services_rpc_proto_msgTypes[61].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RouteHint); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_rpc_services_rpc_proto_msgTypes[62].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HopHint); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_rpc_services_rpc_proto_msgTypes[63].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*InvoiceHTLC); i {
 			case 0:
 				return &v.state
@@ -5673,7 +5886,11 @@ func file_rpc_services_rpc_proto_init() {
 		(*Message_Payments)(nil),
 		(*Message_Invoice)(nil),
 	}
-	file_rpc_services_rpc_proto_msgTypes[54].OneofWrappers = []interface{}{
+	file_rpc_services_rpc_proto_msgTypes[50].OneofWrappers = []interface{}{
+		(*SendRequest_DiscussionId)(nil),
+		(*SendRequest_PayReq)(nil),
+	}
+	file_rpc_services_rpc_proto_msgTypes[56].OneofWrappers = []interface{}{
 		(*PayRequest_PayReq)(nil),
 		(*PayRequest_Address)(nil),
 	}
@@ -5683,7 +5900,7 @@ func file_rpc_services_rpc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_rpc_services_rpc_proto_rawDesc,
 			NumEnums:      3,
-			NumMessages:   62,
+			NumMessages:   64,
 			NumExtensions: 0,
 			NumServices:   6,
 		},
