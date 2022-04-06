@@ -75,6 +75,7 @@ func (app *App) SendMessage(ctx context.Context, discID uint64, amtMsat int64, p
 			result, err := app.send(ctx, dest, amtMsat, payReq, payOpts, tlvs)
 			if err != nil {
 				results.Store(dest, err)
+				return
 			}
 			results.Store(dest, result)
 		}(recipient)
@@ -109,6 +110,11 @@ func (app *App) SendMessage(ctx context.Context, discID uint64, amtMsat int64, p
 		}
 		return true
 	})
+
+	// If there are no payments associated with the message, fail early
+	if len(payments) == 0 {
+		return nil, nil, newCompositeError(errs)
+	}
 
 	// Associate payments with the message
 	for _, payment := range payments {
