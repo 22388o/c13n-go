@@ -7,12 +7,13 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
+	"github.com/lightningnetwork/lnd/lnrpc"
+
 	"github.com/c13n-io/c13n-go/app"
 	"github.com/c13n-io/c13n-go/lnchat"
 	"github.com/c13n-io/c13n-go/model"
 	pb "github.com/c13n-io/c13n-go/rpc/services"
 	"github.com/c13n-io/c13n-go/slog"
-	"github.com/lightningnetwork/lnd/lnrpc"
 )
 
 type paymentServiceServer struct {
@@ -96,7 +97,13 @@ func (s *paymentServiceServer) Pay(ctx context.Context,
 func newPayment(payment *model.Payment) (*pb.Payment, error) {
 	var err error
 	var createdTime, resolvedTime *timestamppb.Timestamp
-	resolvedTimeNs := payment.Htlcs[len(payment.Htlcs)-1].ResolveTimeNs
+	resolvedTimeNs := int64(0)
+	// Assign resolvedTimeNs to the latest succeeded htlc resolve timestamp
+	for _, h := range payment.Htlcs {
+		if h.Status == lnrpc.HTLCAttempt_SUCCEEDED && h.ResolveTimeNs > resolvedTimeNs {
+			resolvedTimeNs = h.ResolveTimeNs
+		}
+	}
 	if resolvedTimeNs > 0 {
 		ts := time.Unix(0, resolvedTimeNs)
 		if resolvedTime, err = newProtoTimestamp(ts); err != nil {
@@ -143,7 +150,7 @@ func newPayment(payment *model.Payment) (*pb.Payment, error) {
 }
 
 func newPaymentHTLCs(htlcs []lnchat.HTLCAttempt) ([]*pb.PaymentHTLC, error) {
-	pb_HTLCs := make([]*pb.PaymentHTLC, len(htlcs))
+	pbHTLCs := make([]*pb.PaymentHTLC, len(htlcs))
 	for i, h := range htlcs {
 		route, err := newPaymentHTLCRoute(&h.Route)
 		if err != nil {
@@ -173,7 +180,7 @@ func newPaymentHTLCs(htlcs []lnchat.HTLCAttempt) ([]*pb.PaymentHTLC, error) {
 			state = pb.HTLCState_HTLC_FAILED
 		}
 
-		pb_HTLCs[i] = &pb.PaymentHTLC{
+		pbHTLCs[i] = &pb.PaymentHTLC{
 			Route:            route,
 			AttemptTimestamp: attemptTime,
 			ResolveTimestamp: resolveTime,
@@ -182,7 +189,7 @@ func newPaymentHTLCs(htlcs []lnchat.HTLCAttempt) ([]*pb.PaymentHTLC, error) {
 		}
 	}
 
-	return pb_HTLCs, nil
+	return pbHTLCs, nil
 }
 
 func newPaymentHTLCRoute(route *lnchat.Route) (*pb.PaymentRoute, error) {
