@@ -139,6 +139,7 @@ func defaultPaymentFilter(p *lnchat.Payment) bool {
 		p.Status == lnchat.PaymentFAILED
 }
 
+// SendPayment attempts to send a payment.
 func (app *App) SendPayment(ctx context.Context,
 	dest string, amtMsat int64, payReq string,
 	opts lnchat.PaymentOptions, tlvs map[uint64][]byte) (*model.Payment, error) {
