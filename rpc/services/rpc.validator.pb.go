@@ -408,6 +408,31 @@ func (this *Payment) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("ResolvedTimestamp", err)
 		}
 	}
+	for _, item := range this.HTLCs {
+		if item != nil {
+			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
+				return github_com_mwitkow_go_proto_validators.FieldError("HTLCs", err)
+			}
+		}
+	}
+	return nil
+}
+func (this *PaymentHTLC) Validate() error {
+	if this.Route != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Route); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Route", err)
+		}
+	}
+	if this.AttemptTimestamp != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.AttemptTimestamp); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("AttemptTimestamp", err)
+		}
+	}
+	if this.ResolveTimestamp != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.ResolveTimestamp); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("ResolveTimestamp", err)
+		}
+	}
 	return nil
 }
 func (this *Invoice) Validate() error {

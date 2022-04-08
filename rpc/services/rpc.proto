@@ -711,6 +711,22 @@ message Payment {
 	PaymentState state = 7;
 	/** The payment index. */
 	uint64 payment_index = 8;
+	/** The payment HTLCs */
+	repeated PaymentHTLC HTLCs = 9;
+}
+
+/** Represents an HTLC attempt of a payment. */
+message PaymentHTLC {
+	/** The route of the HTLC. */
+	PaymentRoute route = 1;
+	/** The time the HTLC was sent. */
+	google.protobuf.Timestamp attempt_timestamp = 2;
+	/** The time the HTLC was resolved. */
+	google.protobuf.Timestamp resolve_timestamp = 3;
+	/** The HTLC state. */
+	HTLCState state = 4;
+	/** The preimage used to settle the HTLC. */
+	string preimage = 5;
 }
 
 /** Represents the state of an invoice. */
@@ -719,6 +735,12 @@ enum PaymentState {
 	PAYMENT_INFLIGHT = 1;
 	PAYMENT_SUCCEEDED = 2;
 	PAYMENT_FAILED = 3;
+}
+
+enum HTLCState {
+	HTLC_IN_FLIGHT = 0;
+	HTLC_SUCCEEDED = 1;
+	HTLC_FAILED = 2;
 }
 
 /** Represents an Lightning network invoice. */
