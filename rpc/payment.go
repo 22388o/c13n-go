@@ -12,6 +12,7 @@ import (
 	"github.com/c13n-io/c13n-go/model"
 	pb "github.com/c13n-io/c13n-go/rpc/services"
 	"github.com/c13n-io/c13n-go/slog"
+	"github.com/lightningnetwork/lnd/lnrpc"
 )
 
 type paymentServiceServer struct {
@@ -123,6 +124,11 @@ func newPayment(payment *model.Payment) (*pb.Payment, error) {
 		return nil, fmt.Errorf("marshal error: invalid payment state: %v", err)
 	}
 
+	htlcs, err := newPaymentHTLCs(payment.Htlcs)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.Payment{
 		Hash:              payment.Hash,
 		Preimage:          payment.Preimage,
@@ -132,7 +138,78 @@ func newPayment(payment *model.Payment) (*pb.Payment, error) {
 		PayReq:            payment.PaymentRequest,
 		State:             state,
 		PaymentIndex:      payment.PaymentIndex,
+		HTLCs:             htlcs,
 	}, nil
+}
+
+func newPaymentHTLCs(htlcs []lnchat.HTLCAttempt) ([]*pb.PaymentHTLC, error) {
+	pb_HTLCs := make([]*pb.PaymentHTLC, len(htlcs))
+	for i, h := range htlcs {
+		route, err := newPaymentHTLCRoute(&h.Route)
+		if err != nil {
+			continue
+		}
+		var attemptTime, resolveTime *timestamppb.Timestamp
+		if h.AttemptTimeNs > 0 {
+			ts := time.Unix(0, h.AttemptTimeNs)
+			if attemptTime, err = newProtoTimestamp(ts); err != nil {
+				return nil, fmt.Errorf("marshal error: invalid timestamp: %v", err)
+			}
+		}
+		if h.ResolveTimeNs > 0 {
+			ts := time.Unix(0, h.ResolveTimeNs)
+			if resolveTime, err = newProtoTimestamp(ts); err != nil {
+				return nil, fmt.Errorf("marshal error: invalid timestamp: %v", err)
+			}
+		}
+
+		var state pb.HTLCState
+		switch h.Status {
+		case lnrpc.HTLCAttempt_IN_FLIGHT:
+			state = pb.HTLCState_HTLC_IN_FLIGHT
+		case lnrpc.HTLCAttempt_SUCCEEDED:
+			state = pb.HTLCState_HTLC_SUCCEEDED
+		case lnrpc.HTLCAttempt_FAILED:
+			state = pb.HTLCState_HTLC_FAILED
+		}
+
+		pb_HTLCs[i] = &pb.PaymentHTLC{
+			Route:            route,
+			AttemptTimestamp: attemptTime,
+			ResolveTimestamp: resolveTime,
+			State:            state,
+			Preimage:         string(h.Preimage),
+		}
+	}
+
+	return pb_HTLCs, nil
+}
+
+func newPaymentHTLCRoute(route *lnchat.Route) (*pb.PaymentRoute, error) {
+	hops, err := newPaymentHTLCRouteHops(route.Hops)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.PaymentRoute{
+		Hops:          hops,
+		TotalTimelock: route.TimeLock,
+		RouteAmtMsat:  route.Amt.Msat(),
+		RouteFeesMsat: route.Fees.Msat(),
+	}, nil
+}
+
+func newPaymentHTLCRouteHops(hops []lnchat.RouteHop) ([]*pb.PaymentHop, error) {
+	resp := make([]*pb.PaymentHop, len(hops))
+	for i, hop := range hops {
+		resp[i] = &pb.PaymentHop{
+			ChanId:           hop.ChannelID,
+			HopAddress:       hop.NodeID.String(),
+			AmtToForwardMsat: hop.AmtToForward.Msat(),
+			FeeMsat:          int64(hop.Fees.Msat()),
+		}
+	}
+	return resp, nil
 }
 
 // NewPaymentServiceServer initializes a new payment service.
